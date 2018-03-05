@@ -1,0 +1,85 @@
+<html lang="en" >
+<head>
+  <title>SAS Batch Submit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Angular Material style sheet -->
+  <!-- link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css" -->
+  <link rel="stylesheet" href="angular/angular-material.min.css">
+  <!-- link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" -->
+  <link href="angular/icons.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="sasbatchsubmit.css">
+  <link rel="stylesheet" href="dialogRun.tmpl.css">
+
+</style>
+</head>
+
+<body ng-app="dsApp" ng-controller="dsController" ng-cloak layout="column">
+
+  <!-- ============================================================================================== -->
+  <!-- HEADER TOOLBAR                                                                                 -->
+  <!-- ============================================================================================== -->
+  <md-toolbar>
+    <section layout="row" layout-align="left center">
+      <md-button aria-label="Menu">
+        <md-icon aria-label="Menu" class="material-icons">menu</md-icon>
+      </md-button>
+      <h2>SAS Batch Submit</h2>
+      <span flex></span>
+      <ANY>{{status}}</ANY>
+      <span style="min-width: 20px;"></span>
+    </section>
+  </md-toolbar>
+
+  <div class="container" layout="row" flex>
+
+    <!-- ============================================================================================== -->
+    <!-- MD-CONTENT                                                                                     -->
+    <!-- ============================================================================================== -->
+    <md-content id="content" flex ng-cloak>
+      <div>
+        <md-card>
+          <md-card-title>
+            <md-toolbar ng-cloak>
+              <section layout="row" layout-sm="column" layout-align="left center" layout-wrap>
+                <h3>Actions:</h3>
+                <md-button class="md-icon-button" aria-label="Run" title="Run" ng-click="runit($event)" ng-disabled="sascode==undefined">
+                  <md-icon aria-label="Run" class="material-icons">play_circle_outline</md-icon>
+                </md-button>
+              </section>
+            </md-toolbar>
+          </md-card-title>
+          <md-card-content>
+            <form action="" name="forms.sascodeForm">
+              <mat-form-field class="example-full-width">
+                <textarea ng-model="sascode" required matInput style="height:60%; width: 100%;" placeholder="Enter SAS code"></textarea>
+              </mat-form-field>
+            </form>
+          </md-card-content>
+        </md-card>
+      </div>
+    </md-content>
+  </div>
+
+</body>
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <!-- script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></scrip --t>
+  <!-- script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-animate.min.js"></script -->
+  <!-- script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-aria.min.js"></script -->
+  <!-- script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-messages.min.js"></script -->
+  <script src="angular/angular.min.js"></script>
+  <script src="angular/angular-animate.min.js"></script>
+  <script src="angular/angular-aria.min.js"></script>
+  <script src="angular/angular-messages.min.js"></script>
+  <script src="angular/angular-cookies.js"></script>
+
+  <!-- Angular Material Library -->
+  <!-- script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script -->
+  <script src="angular/angular-material.min.js"></script>
+  
+  <script src="dsParms.js"></script>
+  <script src="sasbatchsubmit.js"></script>
+  <script src="dialogRun.tmpl.js"></script>
+  
+</html>

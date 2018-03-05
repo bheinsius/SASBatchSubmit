@@ -1,0 +1,66 @@
+<md-dialog id="dsrun-dialog" aria-label="Run Data Selection" flex="80">
+
+    <md-toolbar style="min-height: 64px;">
+      <div class="md-toolbar-tools">
+        <h2>Batch Submit SAS Code</h2>
+        <span flex></span>
+        <span ng-show="loading">Loading...</span>
+        <span flex></span>
+        <span>{{status}}</span>
+      </div>
+    </md-toolbar>
+    <md-progress-linear md-mode="indeterminate" ng-show="submitting"></md-progress-linear>
+
+    <form action="" name="forms.runForm">
+
+    <md-dialog-content style="padding:20px">
+
+          <section layout="column" style="padding-left:25px">
+
+            <h3>Options</h3>
+            <section layout="row">
+
+              <md-input-container style="width: 350px" required>
+                <label>SAS Batch Server</label>
+                <md-select ng-model="selectedBatchServer.serverName" required ng-change="updateSelectedBatchServer(selectedBatchServer.serverName)">
+                  <md-option ng-repeat="batchServer in batchServers" value="{{batchServer.serverName}}" ng-selected='"{{selectedBatchServer.serverName}}" == batchServer.serverName ? true : false'>{{batchServer.serverName}}</md-option>
+                </md-select>
+              </md-input-container>
+
+              <md-input-container style="margin-left: 65px; width:250px">
+                  <label>Run when</label>
+                  <md-select name="atTime" ng-model="atTime">
+                    <md-option value="now">Now</md-option>
+                    <md-option value="datetime">At a specified date/time</md-option>
+                  </md-select>
+                </md-input-container>
+
+                <md-input-container style="margin-bottom: 0px" ng-if="atTime == 'datetime'">
+                  <label>Enter date</label>
+                  <md-datepicker ng-model="runDate" md-placeholder="Enter date" md-min-date="minRunDate" md-max-date="maxRunDate" ng-change="updateOptsRunTime(runDate)"></md-datepicker>
+                </md-input-container>
+
+                <md-input-container style="margin-left:40px; width:126px" ng-if="atTime == 'datetime'">
+                  <label>Enter time</label>
+                  <md-select ng-model="selectedRunTime" ng-change="updateRunTime(selectedRunTime)">
+                    <md-option ng-repeat="runTime in optsRunTime" value="{{runTime}}" ng-selected='"{{runTime}}" == selectedRunTime ? true : false'>{{runTime}}</md-option>
+                  </md-select>
+                </md-input-container>
+
+            </section>
+
+    </md-dialog-content>
+
+    </form>
+
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Cancel
+      </md-button>
+      <md-button ng-click="run()" ng-disabled="!forms.runForm.$valid">
+        Run
+      </md-button>
+    </md-dialog-actions>
+
+</md-dialog>
