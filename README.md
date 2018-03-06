@@ -2,6 +2,7 @@
 SAS Batch Submit WebApp
 
 Submit SAS code in batch from a webapp, right now or sometime later.
+Runs on Linux only for now. Sends email when the job is done.
 
 ![Screenshot](screenshot.png?raw=true "Screenshot")
 
