@@ -1,7 +1,8 @@
 #SAS Batch Submit WebApp
 
 Submit SAS code in batch from a webapp, right now or sometime later.  
-Runs on Linux only for now. Sends email when the job is done.
+It uses the Linux at command that sends an email containing the SAS log and list output when the job has finished.  
+Linux only for now.
 
 ![Screenshot](screenshot.png?raw=true "Screenshot")
 
