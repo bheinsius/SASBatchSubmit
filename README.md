@@ -1,5 +1,5 @@
 # SASBatchSubmit
-SAS Batch Submt WebApp
+SAS Batch Submit WebApp
 
 Submit SAS code in batch from a webapp, right now or sometime later.
 
