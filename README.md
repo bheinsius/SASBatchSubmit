@@ -16,4 +16,5 @@ Created using AngularJS and SAS Stored Processes.
 2. Copy the SASBatchSubmit folder containing the webapp to the htdocs of your web server.
 3. Allow XCMD on the Workspace Server where the Stored Processes run.
 4. Update parameters in SASBatchSubmit/dsParms.js to reflect the metadata location of the SAS packages you imported before.
-5. Navigate to yourserver.com/SASStoredProcess/SASBatchSubmit/. Note that it will give you an error if you are not logged on to SAS prior to opening the web page. So logon first - or configure sso.
+5. Add a .forward file in your home directory or configure /etc/aliases to forward the email to the mail accounts that you want to receive the email at.
+6. Navigate to yourserver.com/SASStoredProcess/SASBatchSubmit/. Note that it will give you an error if you are not logged on to SAS prior to opening the web page. So logon first - or configure sso.
