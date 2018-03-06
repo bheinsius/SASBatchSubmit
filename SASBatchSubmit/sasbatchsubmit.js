@@ -1,6 +1,6 @@
 var app = angular
   .module('dsApp', ['ngMaterial', 'ngMessages', 'ngCookies'])
-  .controller('dsController', dsController)
+  .controller('myController', myController)
   .config(function($mdThemingProvider) {
     $mdThemingProvider.theme('default')
       .primaryPalette('blue') // specify primary color, all
@@ -11,7 +11,7 @@ var app = angular
       .backgroundPalette('grey')
   });
 
-function dsController($scope, $http, $log, $timeout, $q, $mdDialog, $filter, $cookies) {
+function myController($scope, $http, $log, $timeout, $q, $mdDialog, $filter, $cookies) {
 
   var self = this;
   

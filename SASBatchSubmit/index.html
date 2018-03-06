@@ -14,17 +14,18 @@
 </style>
 </head>
 
-<body ng-app="dsApp" ng-controller="dsController" ng-cloak layout="column">
+<body ng-app="dsApp" ng-controller="myController" ng-cloak layout="column">
 
   <!-- ============================================================================================== -->
   <!-- HEADER TOOLBAR                                                                                 -->
   <!-- ============================================================================================== -->
   <md-toolbar>
     <section layout="row" layout-align="left center">
-      <md-button aria-label="Menu">
+      <!-- <md-button aria-label="Menu">
         <md-icon aria-label="Menu" class="material-icons">menu</md-icon>
-      </md-button>
-      <h2>SAS Batch Submit</h2>
+      </md-button> -->
+      <img src="eomlogo-90.png" style="margin-left:10px; margin-bottom:2px;"/>
+      <h2 style="margin-left:15px;">SAS Batch Submit</h2>
       <span flex></span>
       <ANY>{{status}}</ANY>
       <span style="min-width: 20px;"></span>
@@ -42,7 +43,7 @@
           <md-card-title>
             <md-toolbar ng-cloak>
               <section layout="row" layout-sm="column" layout-align="left center" layout-wrap>
-                <h3>Actions:</h3>
+                <h3 style="margin-left: 10px;">Actions:</h3>
                 <md-button class="md-icon-button" aria-label="Run" title="Run" ng-click="runit($event)" ng-disabled="sascode==undefined">
                   <md-icon aria-label="Run" class="material-icons">play_circle_outline</md-icon>
                 </md-button>

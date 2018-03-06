@@ -91,17 +91,16 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
           // set the first item to the selected batch server
           $scope.selectedBatchServer = $scope.batchServers[0]; 
         } else {
-          $scope.status = 'SAS Error while retrieving SAS Server Contexts.'
+          $scope.status = 'SAS Stored Process Error while retrieving the list of SAS Batch Servers.'
           $log.info(response);
         }
       } else {
-        $scope.status = 'SAS Error while retrieving SAS Server Contexts.'
+        $scope.status = 'SAS Stored Process Error while retrieving the list of SAS Batch Servers.'
         $log.info(response);
       }
     }, function fail(response) {
-      $scope.status = 'FAILED retrieving SAS Server Contexts.'
+      $scope.status = 'FAILED retrieving the list of SAS Batch Servers.'
       $log.info(response);
-      alert('FAILED.');
     });
 
   }
@@ -114,8 +113,8 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
 
   // md-dialog Run button
   $scope.run = function() {
-$log.info($scope.selectedBatchServer);
-    $scope.status = 'Submitting...';
+
+    $scope.status = 'Submitting to ' + $scope.selectedBatchServer.serverName + '...';
 
     // SAS macro variables are limited to 32767 characters length.
     // Therefore, split the SAS code in chunks of 10000 characters, named c1, c2, etc. (= chunk1, chunk2, etc.)
@@ -127,8 +126,7 @@ $log.info($scope.selectedBatchServer);
       chunkNum++;
       httpData = httpData + '&c' + (chunkNum) + '=' + chunk;
     });
-    httpData = httpData + '&serverContext=' + $scope.selectedServerContext
-                        + '&rundate=' + ( $scope.atTime == "now" ? "now" : self.runDate.toISOString().substring(0,10) )
+    httpData = httpData + '&rundate=' + ( $scope.atTime == "now" ? "now" : self.runDate.toISOString().substring(0,10) )
                         + '&runtime=' + ( $scope.atTime == "now" ? "" : $scope.selectedRunTime )
                         + '&sascmd=' + $scope.selectedBatchServer.cmdline
                         ;
