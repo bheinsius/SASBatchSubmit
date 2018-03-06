@@ -2,7 +2,7 @@
 
 Submit SAS code in batch from a webapp, right now or sometime later.  
 It uses the Linux at command that sends an email containing the SAS log and list output when the job has finished.  
-Linux only for now.
+SAS compute servers on Linux only for now, web tier can be any.
 
 ![Screenshot](screenshot.png?raw=true "Screenshot")
 
