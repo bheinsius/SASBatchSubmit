@@ -29,13 +29,11 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
           $scope.submitting = false; // used by progress indicator
           $scope.batchServers = response.data['SASTableData+BATCHSERVERS'];
 
-          // if useShortcutCommands == true then replace cmdLines with shortcuts from cmdlineShortcuts array (set in dsParms.js)
-          if (useShortcutCommands) {
-            for (i=0; i<$scope.batchServers.length; i++) {
-              for (j=0; j<cmdlineShortcuts.length; j++) {
-                if ($scope.batchServers[i].cmdline == cmdlineShortcuts[j].cmdline) {
-                  $scope.batchServers[i].cmdline = cmdlineShortcuts[j].shortcut;
-                }
+          // replace cmdLines with shortcuts from cmdlineShortcuts array (set in dsParms.js) -- if they exist
+          for (i=0; i<$scope.batchServers.length; i++) {
+            for (j=0; j<cmdlineShortcuts.length; j++) {
+              if ($scope.batchServers[i].cmdline == cmdlineShortcuts[j].cmdline) {
+                $scope.batchServers[i].cmdline = cmdlineShortcuts[j].shortcut;
               }
             }
           }
