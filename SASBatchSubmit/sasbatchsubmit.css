@@ -2,3 +2,8 @@ md-toolbar {
  min-height:60px;
  max-height:60px
 }
+
+textarea {
+ font-family: monospace;
+ font-size: larger;
+}
