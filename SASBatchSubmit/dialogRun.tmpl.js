@@ -163,12 +163,12 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
               .ok('Close')
           );
         } else {
-          $scope.status = ds_userid + ' / ' + $scope.selectedDsCode + ' FAILED TO SUBMIT.'
+          $scope.status = 'SAS Stored Process Error while submitting the SAS code';
           $log.info(response);
         }
       }, function fail(response) {
+        $scope.status = 'ERROR: Failed';
         $log.info(response);
-        alert('failed.');
       });
 
   };
