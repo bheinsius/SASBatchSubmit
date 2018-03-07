@@ -22,30 +22,30 @@
 
               <md-input-container style="width: 350px" required>
                 <label>SAS Batch Server</label>
-                <md-select ng-model="selectedBatchServer.serverName" required ng-change="updateSelectedBatchServer(selectedBatchServer.serverName)">
-                  <md-option ng-repeat="batchServer in batchServers" value="{{batchServer.serverName}}" ng-selected='"{{selectedBatchServer.serverName}}" == batchServer.serverName ? true : false'>{{batchServer.serverName}}</md-option>
+                <md-select ng-model="selectedBatchServer" required ng-model-options="{trackBy: '$value.serverName'}">
+                  <md-option ng-value="batchServer" ng-repeat="batchServer in batchServers">{{batchServer.serverName}}</md-option>
                 </md-select>
               </md-input-container>
 
               <md-input-container style="margin-left: 65px; width:250px">
-                  <label>Run when</label>
-                  <md-select name="atTime" ng-model="atTime">
-                    <md-option value="now">Now</md-option>
-                    <md-option value="datetime">At a specified date/time</md-option>
-                  </md-select>
-                </md-input-container>
+                <label>Run when</label>
+                <md-select name="atTime" ng-model="atTime">
+                  <md-option value="now">Now</md-option>
+                  <md-option value="datetime">At a specified date/time</md-option>
+                </md-select>
+              </md-input-container>
 
-                <md-input-container style="margin-bottom: 0px" ng-if="atTime == 'datetime'">
-                  <label>Enter date</label>
-                  <md-datepicker ng-model="runDate" md-placeholder="Enter date" md-min-date="minRunDate" md-max-date="maxRunDate" ng-change="updateOptsRunTime(runDate)"></md-datepicker>
-                </md-input-container>
+              <md-input-container style="margin-bottom: 0px" ng-show="atTime == 'datetime'">
+                <label>Enter date</label>
+                <md-datepicker ng-model="runDate" md-placeholder="Enter date" md-min-date="minRunDate" md-max-date="maxRunDate" ng-change="updateOptsRunTime(runDate)"></md-datepicker>
+              </md-input-container>
 
-                <md-input-container style="margin-left:40px; width:126px" ng-if="atTime == 'datetime'">
-                  <label>Enter time</label>
-                  <md-select ng-model="selectedRunTime" ng-change="updateRunTime(selectedRunTime)">
-                    <md-option ng-repeat="runTime in optsRunTime" value="{{runTime}}" ng-selected='"{{runTime}}" == selectedRunTime ? true : false'>{{runTime}}</md-option>
-                  </md-select>
-                </md-input-container>
+              <md-input-container style="margin-left:40px; width:126px" ng-show="atTime == 'datetime'">
+                <label>Enter time</label>
+                <md-select ng-model="selectedRunTime" ng-model-options="{trackBy: '$value'}">
+                  <md-option ng-value="runTime" ng-repeat="runTime in optsRunTime">{{runTime}}</md-option>
+                </md-select>
+              </md-input-container>
 
             </section>
 

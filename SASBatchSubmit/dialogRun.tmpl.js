@@ -13,69 +13,7 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
   $scope.minRunDate      = new Date(); // today
   $scope.maxRunDate      = new Date(new Date().setDate(new Date().getDate()+30));  // today + 30 days
 
-  // to split SAS code into chunks where it gets larger than 32000 characters
-  function chunkSubstr(str, size) {
-    const numChunks = Math.ceil(str.length / size)
-    const chunks = new Array(numChunks)
-    for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
-      chunks[i] = str.substr(o, size)
-    }
-    return chunks
-  }
-  
-  // get last selected Server Context from cookie serverContext
-  $scope.selectedServerContext = $cookies.get('serverContext');
-  if ($scope.selectedServerContext == undefined) {
-    // no cookie found -> set to SASApp and save in cookie with expire date = now + 14 days
-    $scope.selectedServerContext = 'SASApp';
-    var expireDate = new Date();
-    expireDate.setDate(expireDate.getDate() + 14);
-    $cookies.put('serverContext',$scope.selectedServerContext,{'expires':expireDate});
-  }
-
-  // create list self.scheduleTimeOpts to contain scheduling times 00:00 - 24:00
-  self.scheduleTimeOpts = [];
-  for (var hour=0; hour<24; hour++) {
-    for (var minute=0; minute<60; minute = minute + 5) {
-      self.scheduleTimeOpts.push(pad(hour,2) + ':' + pad(minute,2));
-    }
-  }
-
-  // function pad to pad a number with leading zero's
-  function pad(num,size) {
-    var s = "0000000000" + num;
-    return s.substr(s.length - size);
-  }
-
-  // populate $scope.optsRunTime to contain only times > now
-  $scope.updateOptsRunTime = function(runDate) {
-    self.runDate = runDate;
-    $scope.optsRunTime = [];
-    var iarray = 0;
-    for (i=0; i<self.scheduleTimeOpts.length; i++) {
-      if (new Date(runDate.getFullYear(),runDate.getMonth(),runDate.getDate(),self.scheduleTimeOpts[i].substr(0,2),self.scheduleTimeOpts[i].substr(3,2)) > new Date()) {
-        $scope.optsRunTime.push(self.scheduleTimeOpts[i]);
-      }
-    }
-    $scope.selectedRunTime = $scope.optsRunTime[0]; // set default selection
-  }
-  $scope.updateOptsRunTime(self.runDate);
-
-  // this is needed because the md-select does not update $scope.selectedRunTime by itself
-  $scope.updateRunTime = function(runTime) {
-    $scope.selectedRunTime = runTime;
-  }
-
-  // this is needed because the md-select does not update $scope.selectedSbatchServer by itself
-  $scope.updateSelectedBatchServer = function(batchServer) {
-    $scope.selectedBatchServer.serverName = batchServer;
-    // save in cookie with expire date = now + 14 days
-    var expireDate = new Date();
-    expireDate.setDate(expireDate.getDate() + 14);
-    $cookies.put('batchServer',batchServer,{'expires':expireDate});
-  }
-
-  // get the list of SAS Server Contexts available to the logged-on user
+  // get the list of Batch Server available to the logged-on user
   function getBatchServers() {
     $http({
       method: 'POST'
@@ -85,11 +23,42 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
       , url: urlSTP("getBatchServers")
     }).then(function successCallback(response) {
       if (response.data['SASTableData+SYSCC'] != undefined) {
+
         if (response.data['SASTableData+SYSCC'][0].syscc == 0) {
-          $scope.submitting = false;
+
+          $scope.submitting = false; // used by progress indicator
           $scope.batchServers = response.data['SASTableData+BATCHSERVERS'];
-          // set the first item to the selected batch server
-          $scope.selectedBatchServer = $scope.batchServers[0]; 
+
+          // if useShortcutCommands == true then replace cmdLines with shortcuts from cmdlineShortcuts array (set in dsParms.js)
+          if (useShortcutCommands) {
+            for (i=0; i<$scope.batchServers.length; i++) {
+              for (j=0; j<cmdlineShortcuts.length; j++) {
+                if ($scope.batchServers[i].cmdline == cmdlineShortcuts[j].cmdline) {
+                  $scope.batchServers[i].cmdline = cmdlineShortcuts[j].shortcut;
+                }
+              }
+            }
+          }
+
+          // get last selected Batch Server from batchServerName cookie
+          var selectedBatchServerName = $cookies.get('batchServerName');
+          if (selectedBatchServerName == undefined) {
+            // set the first item to the selected batch server
+            selectedBatchServerName = $scope.batchServers[0].serverName;
+            // save selectedBatchServerName in cookie with expire date = now + 14 days
+            var expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 14);
+            $cookies.put('batchServerName',selectedBatchServerName,{'expires':expireDate});
+          }
+
+          // find selectedBatchServerName in $scope.batchServers
+          for (i=0; i<$scope.batchServers.length; i++) {
+            if ($scope.batchServers[i].serverName == selectedBatchServerName) {
+              $scope.selectedBatchServer = $scope.batchServers[i];
+              $log.info("Found: " + selectedBatchServerName);
+            }
+          }
+
         } else {
           $scope.status = 'SAS Stored Process Error while retrieving the list of SAS Batch Servers.'
           $log.info(response);
@@ -102,9 +71,46 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
       $scope.status = 'FAILED retrieving the list of SAS Batch Servers.'
       $log.info(response);
     });
-
   }
   getBatchServers();
+
+  // to split SAS code into chunks where it gets larger than 32000 characters
+  function chunkSubstr(str, size) {
+    const numChunks = Math.ceil(str.length / size)
+    const chunks = new Array(numChunks)
+    for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+      chunks[i] = str.substr(o, size)
+    }
+    return chunks
+  }
+
+  // function pad to pad a number with leading zero's
+  function pad(num,size) {
+    var s = "0000000000" + num;
+    return s.substr(s.length - size);
+  }
+
+  // create list self.scheduleTimeOpts to contain scheduling times 00:00 - 24:00
+  self.scheduleTimeOpts = [];
+  for (var hour=0; hour<24; hour++) {
+    for (var minute=0; minute<60; minute = minute + 5) {
+      self.scheduleTimeOpts.push(pad(hour,2) + ':' + pad(minute,2));
+    }
+  }
+
+  // populate $scope.optsRunTime to contain only times > now
+  $scope.updateOptsRunTime = function(runDate) {
+    self.runDate = runDate;
+    $scope.optsRunTime = [];
+    var iarray = 0;
+    for (i=0; i<self.scheduleTimeOpts.length; i++) {
+      if (new Date(runDate.getFullYear(),runDate.getMonth(),runDate.getDate(),self.scheduleTimeOpts[i].substr(0,2),self.scheduleTimeOpts[i].substr(3,2)) > new Date()) {
+        $scope.optsRunTime.push(self.scheduleTimeOpts[i]);
+      }
+    }
+    $scope.selectedRunTime = $scope.optsRunTime[0]; // set default selection to the first item
+  }
+  $scope.updateOptsRunTime(self.runDate);
 
   // md-dialog Cancel button
   $scope.cancel = function() {
@@ -131,6 +137,12 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
                         + '&sascmd=' + $scope.selectedBatchServer.cmdline
                         ;
     $log.info(httpData);
+
+    // save $scope.selectedBatchServer.serverName in cookie with expire date = now + 14 days
+    var expireDate = new Date();
+    expireDate.setDate(expireDate.getDate() + 14);
+    $cookies.put('batchServerName',$scope.selectedBatchServer.serverName,{'expires':expireDate});
+
     $scope.submitting = true;
     $http({
         method: 'POST'
@@ -162,5 +174,5 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
       });
 
   };
-  
+
 }
