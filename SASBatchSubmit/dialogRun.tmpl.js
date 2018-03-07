@@ -136,7 +136,7 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
                         + '&runtime=' + ( $scope.atTime == "now" ? "" : $scope.selectedRunTime )
                         + '&sascmd=' + $scope.selectedBatchServer.cmdline
                         ;
-    $log.info(httpData);
+    //$log.info(httpData);
 
     // save $scope.selectedBatchServer.serverName in cookie with expire date = now + 14 days
     var expireDate = new Date();
