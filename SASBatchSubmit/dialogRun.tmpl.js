@@ -29,11 +29,13 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
           $scope.submitting = false; // used by progress indicator
           $scope.batchServers = response.data['SASTableData+BATCHSERVERS'];
 
-          // replace cmdLines with shortcuts from cmdlineShortcuts array (set in dsParms.js) -- if they exist
-          for (i=0; i<$scope.batchServers.length; i++) {
-            for (j=0; j<cmdlineShortcuts.length; j++) {
-              if ($scope.batchServers[i].cmdline == cmdlineShortcuts[j].cmdline) {
-                $scope.batchServers[i].cmdline = cmdlineShortcuts[j].shortcut;
+          // if useShortcutCommands == true then replace cmdLines with shortcuts from cmdlineShortcuts array (set in dsParms.js)
+          if (useShortcutCommands) {
+            for (i=0; i<$scope.batchServers.length; i++) {
+              for (j=0; j<cmdlineShortcuts.length; j++) {
+                if ($scope.batchServers[i].cmdline == cmdlineShortcuts[j].cmdline) {
+                  $scope.batchServers[i].cmdline = cmdlineShortcuts[j].shortcut;
+                }
               }
             }
           }
@@ -73,11 +75,11 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
   getBatchServers();
 
   // to split SAS code into chunks where it gets larger than 32000 characters
-  function chunkSubstr(str,size) {
+  function chunkSubstr(str, size) {
     const numChunks = Math.ceil(str.length / size)
     const chunks = new Array(numChunks)
     for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
-      chunks[i] = escape(str.substr(o,size));
+      chunks[i] = escape(str.substr(o, size));
     }
     return chunks
   }
@@ -150,7 +152,6 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
         , url: urlSTP("run")
         , data: httpData
       }).then(function successCallback(response) {
-
         if (response.data['SASTableData+SYSCC'][0].syscc == 0) {
           $scope.submitting = false;
           result = response.data['SASTableData+RESULT'][0];
@@ -163,12 +164,12 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
               .ok('Close')
           );
         } else {
-          $scope.status = ds_userid + ' / ' + $scope.selectedDsCode + ' FAILED TO SUBMIT.'
+          $scope.status = 'SAS Stored Process Error while submitting the SAS code';
           $log.info(response);
         }
       }, function fail(response) {
+        $scope.status = 'ERROR: Failed';
         $log.info(response);
-        alert('failed.');
       });
 
   };
