@@ -2,7 +2,7 @@
 var urlSPWA  = '/SASStoredProcess/do'
 
 // folder that contains the stored processes
-var folderSP = '/Wikker/Shared Data/Stored Processes/SASBatchSubmit/';
+var folderSP = '/Shared Data/Stored Processes/SASBatchSubmit/';
 
 function urlSTP(stp) {
     return urlSPWA + '?_program=' + folderSP + stp;
