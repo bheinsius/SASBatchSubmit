@@ -14,3 +14,8 @@ function urlSTP(stp) {
 var cmdlineShortcuts = [{cmdline:"/apps/sas/SASConfig/Lev5/SASApp/BatchServer/sasbatch.sh", shortcut:"Lev5_SASApp_BatchServer.sh"}
                        ,{cmdline:"/apps/sas/SASConfig/Lev5/SASETL/BatchServer/sasbatch.sh", shortcut:"Lev5_SASETL_BatchServer.sh"}
                        ];
+
+// at mail sometimes gets sent to the account that the spawner runs under, instead of the account running the Workspace Server.
+// set atmail to 'Y' to let at send the mail automatically, which will have the at job number in the mail subject line.
+// set atmail to 'N' to send the log and output separately to &sysuserid, which will NOT have the at job number in the mail subject line.
+var atMail = 'Y';

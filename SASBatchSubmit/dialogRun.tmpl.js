@@ -132,6 +132,7 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
     });
     httpData = httpData + '&rundate=' + ( $scope.atTime == "now" ? "now" : self.runDate.toISOString().substring(0,10) )
                         + '&runtime=' + ( $scope.atTime == "now" ? "" : $scope.selectedRunTime )
+                        + '&atmail=' + ( atMail == undefined ? "Y" : atMail )
                         + '&sascmd=' + $scope.selectedBatchServer.cmdline
                         ;
     //$log.info(httpData);
