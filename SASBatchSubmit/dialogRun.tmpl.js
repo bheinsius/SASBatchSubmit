@@ -77,7 +77,7 @@ function RunDialogController($scope,$mdDialog,$http,$log,$cookies,sascode) {
     const numChunks = Math.ceil(str.length / size)
     const chunks = new Array(numChunks)
     for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
-      chunks[i] = escape(str.substr(o,size));
+      chunks[i] = encodeURIComponent(str.substr(o,size));
     }
     return chunks
   }
